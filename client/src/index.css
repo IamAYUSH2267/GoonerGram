@@ -1,0 +1,172 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(224, 65%, 7%);
+  --foreground: hsl(0, 0%, 95%);
+  --card: hsl(226, 41%, 12%);
+  --card-foreground: hsl(0, 0%, 95%);
+  --popover: hsl(224, 65%, 7%);
+  --popover-foreground: hsl(0, 0%, 95%);
+  --primary: hsl(248, 79%, 62%);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(226, 41%, 12%);
+  --secondary-foreground: hsl(0, 0%, 95%);
+  --muted: hsl(226, 41%, 12%);
+  --muted-foreground: hsl(215, 20%, 65%);
+  --accent: hsl(248, 79%, 62%);
+  --accent-foreground: hsl(0, 0%, 100%);
+  --destructive: hsl(348, 86%, 61%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --border: hsl(248, 79%, 62%, 0.2);
+  --input: hsl(226, 41%, 12%);
+  --ring: hsl(248, 79%, 62%);
+  --chart-1: hsl(248, 79%, 62%);
+  --chart-2: hsl(159, 100%, 50%);
+  --chart-3: hsl(348, 86%, 61%);
+  --chart-4: hsl(159, 100%, 36%);
+  --chart-5: hsl(348, 86%, 61%);
+  --sidebar: hsl(226, 41%, 12%);
+  --sidebar-foreground: hsl(0, 0%, 95%);
+  --sidebar-primary: hsl(248, 79%, 62%);
+  --sidebar-primary-foreground: hsl(0, 0%, 100%);
+  --sidebar-accent: hsl(226, 41%, 12%);
+  --sidebar-accent-foreground: hsl(248, 79%, 62%);
+  --sidebar-border: hsl(248, 79%, 62%, 0.2);
+  --sidebar-ring: hsl(248, 79%, 62%);
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-serif: Georgia, serif;
+  --font-mono: Menlo, monospace;
+  --radius: 1rem;
+  
+  /* Custom Gooners colors */
+  --dark-navy: hsl(224, 65%, 7%);
+  --darker-navy: hsl(226, 41%, 12%);
+  --purple-neon: hsl(248, 79%, 62%);
+  --purple-light: hsl(258, 86%, 66%);
+  --neon-green: hsl(159, 100%, 50%);
+  --neon-pink: hsl(348, 86%, 61%);
+  --glass-bg: hsla(248, 79%, 62%, 0.1);
+  --glass-border: hsla(248, 79%, 62%, 0.2);
+}
+
+.dark {
+  --background: hsl(224, 65%, 7%);
+  --foreground: hsl(0, 0%, 95%);
+  --card: hsl(226, 41%, 12%);
+  --card-foreground: hsl(0, 0%, 95%);
+  --popover: hsl(224, 65%, 7%);
+  --popover-foreground: hsl(0, 0%, 95%);
+  --primary: hsl(248, 79%, 62%);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(226, 41%, 12%);
+  --secondary-foreground: hsl(0, 0%, 95%);
+  --muted: hsl(226, 41%, 12%);
+  --muted-foreground: hsl(215, 20%, 65%);
+  --accent: hsl(248, 79%, 62%);
+  --accent-foreground: hsl(0, 0%, 100%);
+  --destructive: hsl(348, 86%, 61%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --border: hsl(248, 79%, 62%, 0.2);
+  --input: hsl(226, 41%, 12%);
+  --ring: hsl(248, 79%, 62%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+    background: var(--dark-navy);
+    color: var(--foreground);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  .glass-effect {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+  }
+  
+  .story-ring {
+    background: linear-gradient(45deg, var(--purple-neon), var(--neon-green), var(--neon-pink));
+    padding: 2px;
+    border-radius: 50%;
+  }
+  
+  .story-inner {
+    background: var(--dark-navy);
+    border-radius: 50%;
+    padding: 2px;
+  }
+  
+  .nav-pill {
+    transition: all 0.3s ease;
+  }
+  
+  .nav-pill.active {
+    background: linear-gradient(135deg, var(--purple-neon), var(--purple-light));
+    transform: scale(1.1);
+  }
+  
+  .post-card {
+    background: hsla(226, 41%, 12%, 0.8);
+    backdrop-filter: blur(15px);
+    border: 1px solid var(--glass-border);
+  }
+  
+  .chat-bubble-sent {
+    background: linear-gradient(135deg, var(--purple-neon), var(--purple-light));
+  }
+  
+  .chat-bubble-received {
+    background: hsla(203, 213, 225, 0.1);
+    border: 1px solid hsla(203, 213, 225, 0.2);
+  }
+  
+  .floating-btn {
+    background: linear-gradient(135deg, var(--purple-neon), var(--purple-light));
+    box-shadow: 0 8px 32px hsla(248, 79%, 62%, 0.3);
+  }
+  
+  .online-indicator {
+    background: var(--neon-green);
+    box-shadow: 0 0 8px hsla(159, 100%, 50%, 0.6);
+  }
+
+  .gradient-text {
+    background: linear-gradient(to right, var(--purple-neon), var(--neon-green));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hover-glow:hover {
+    box-shadow: 0 0 20px hsla(248, 79%, 62%, 0.4);
+    transition: box-shadow 0.3s ease;
+  }
+
+  .scrollbar-hide {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
