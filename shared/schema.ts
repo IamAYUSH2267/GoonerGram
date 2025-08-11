@@ -31,7 +31,7 @@ export const users = pgTable("users", {
   firstName: varchar("first_name"),
   lastName: varchar("last_name"),
   profileImageUrl: varchar("profile_image_url"),
-  username: varchar("username").unique(),
+  username: varchar("username").unique().notNull(),
   bio: text("bio"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
@@ -121,6 +121,18 @@ export const postComments = pgTable("post_comments", {
   postId: varchar("post_id").notNull().references(() => posts.id, { onDelete: 'cascade' }),
   userId: varchar("user_id").notNull().references(() => users.id, { onDelete: 'cascade' }),
   content: text("content").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Notifications
+export const notifications = pgTable("notifications", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: 'cascade' }),
+  fromUserId: varchar("from_user_id").references(() => users.id, { onDelete: 'cascade' }),
+  type: varchar("type").notNull(), // like, comment, follow, unfollow
+  postId: varchar("post_id").references(() => posts.id, { onDelete: 'cascade' }),
+  message: text("message").notNull(),
+  isRead: boolean("is_read").default(false),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -226,6 +238,21 @@ export const postCommentsRelations = relations(postComments, ({ one }) => ({
   }),
 }));
 
+export const notificationsRelations = relations(notifications, ({ one }) => ({
+  user: one(users, {
+    fields: [notifications.userId],
+    references: [users.id],
+  }),
+  fromUser: one(users, {
+    fields: [notifications.fromUserId],
+    references: [users.id],
+  }),
+  post: one(posts, {
+    fields: [notifications.postId],
+    references: [posts.id],
+  }),
+}));
+
 // Types and schemas
 export type UpsertUser = typeof users.$inferInsert;
 export type User = typeof users.$inferSelect;
@@ -235,6 +262,7 @@ export type GooningPartner = typeof gooningPartners.$inferSelect;
 export type ChatRoom = typeof chatRooms.$inferSelect;
 export type Message = typeof messages.$inferSelect;
 export type GlobalMessage = typeof globalMessages.$inferSelect;
+export type Notification = typeof notifications.$inferSelect;
 
 export const insertPostSchema = createInsertSchema(posts).omit({
   id: true,
@@ -265,8 +293,14 @@ export const insertPartnerRequestSchema = createInsertSchema(gooningPartners).om
   status: true,
 });
 
+export const insertNotificationSchema = createInsertSchema(notifications).omit({
+  id: true,
+  createdAt: true,
+});
+
 export type InsertPost = z.infer<typeof insertPostSchema>;
 export type InsertStory = z.infer<typeof insertStorySchema>;
 export type InsertMessage = z.infer<typeof insertMessageSchema>;
 export type InsertGlobalMessage = z.infer<typeof insertGlobalMessageSchema>;
 export type InsertPartnerRequest = z.infer<typeof insertPartnerRequestSchema>;
+export type InsertNotification = z.infer<typeof insertNotificationSchema>;

@@ -24,12 +24,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.patch('/api/profile', isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user.claims.sub;
-      const { username, bio } = req.body;
-      const user = await storage.updateUserProfile(userId, { username, bio });
+      const { username, bio, profileImageUrl } = req.body;
+      
+      // Check username availability if username is being updated
+      if (username) {
+        const isAvailable = await storage.checkUsernameAvailability(username, userId);
+        if (!isAvailable) {
+          return res.status(409).json({ message: "Username is already taken" });
+        }
+      }
+      
+      const user = await storage.updateUserProfile(userId, { username, bio, profileImageUrl });
       res.json(user);
     } catch (error) {
       console.error("Error updating profile:", error);
       res.status(500).json({ message: "Failed to update profile" });
+    }
+  });
+
+  app.get('/api/profile/check-username/:username', isAuthenticated, async (req: any, res) => {
+    try {
+      const { username } = req.params;
+      const userId = req.user.claims.sub;
+      const isAvailable = await storage.checkUsernameAvailability(username, userId);
+      res.json({ available: isAvailable });
+    } catch (error) {
+      console.error("Error checking username:", error);
+      res.status(500).json({ message: "Failed to check username" });
     }
   });
 
@@ -89,6 +110,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error unliking post:", error);
       res.status(500).json({ message: "Failed to unlike post" });
+    }
+  });
+
+  app.delete('/api/posts/:postId', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { postId } = req.params;
+      await storage.deletePost(postId, userId);
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error deleting post:", error);
+      res.status(500).json({ message: "Failed to delete post" });
     }
   });
 
@@ -239,6 +272,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error sending global message:", error);
       res.status(500).json({ message: "Failed to send global message" });
+    }
+  });
+
+  // Notification routes
+  app.get('/api/notifications', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const limit = req.query.limit ? parseInt(req.query.limit) : undefined;
+      const notifications = await storage.getNotifications(userId, limit);
+      res.json(notifications);
+    } catch (error) {
+      console.error("Error fetching notifications:", error);
+      res.status(500).json({ message: "Failed to fetch notifications" });
+    }
+  });
+
+  app.get('/api/notifications/unread-count', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const count = await storage.getUnreadNotificationCount(userId);
+      res.json({ count });
+    } catch (error) {
+      console.error("Error fetching unread count:", error);
+      res.status(500).json({ message: "Failed to fetch unread count" });
+    }
+  });
+
+  app.patch('/api/notifications/:notificationId/read', isAuthenticated, async (req: any, res) => {
+    try {
+      const { notificationId } = req.params;
+      await storage.markNotificationAsRead(notificationId);
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error marking notification as read:", error);
+      res.status(500).json({ message: "Failed to mark notification as read" });
     }
   });
 

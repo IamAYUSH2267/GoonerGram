@@ -9,6 +9,7 @@ import {
   globalMessages,
   postLikes,
   postComments,
+  notifications,
   type User,
   type UpsertUser,
   type Post,
@@ -17,10 +18,12 @@ import {
   type InsertStory,
   type InsertMessage,
   type InsertGlobalMessage,
+  type InsertNotification,
   type Message,
   type GlobalMessage,
   type GooningPartner,
   type ChatRoom,
+  type Notification,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, and, gte, sql } from "drizzle-orm";
@@ -31,12 +34,14 @@ export interface IStorage {
   upsertUser(user: UpsertUser): Promise<User>;
   
   // Profile operations
-  updateUserProfile(id: string, data: { username?: string; bio?: string }): Promise<User>;
+  updateUserProfile(id: string, data: { username?: string; bio?: string; profileImageUrl?: string }): Promise<User>;
+  checkUsernameAvailability(username: string, currentUserId?: string): Promise<boolean>;
   
   // Post operations
   createPost(post: InsertPost): Promise<Post>;
   getPosts(limit?: number): Promise<(Post & { user: User; isLiked?: boolean; likesCount: number; commentsCount: number })[]>;
   getPostsByUser(userId: string): Promise<Post[]>;
+  deletePost(postId: string, userId: string): Promise<void>;
   likePost(postId: string, userId: string): Promise<void>;
   unlikePost(postId: string, userId: string): Promise<void>;
   
@@ -59,6 +64,12 @@ export interface IStorage {
   // Global chat operations
   sendGlobalMessage(message: InsertGlobalMessage): Promise<GlobalMessage>;
   getGlobalMessages(limit?: number): Promise<(GlobalMessage & { sender: User })[]>;
+  
+  // Notification operations
+  createNotification(notification: InsertNotification): Promise<Notification>;
+  getNotifications(userId: string, limit?: number): Promise<(Notification & { fromUser?: User; post?: Post })[]>;
+  markNotificationAsRead(notificationId: string): Promise<void>;
+  getUnreadNotificationCount(userId: string): Promise<number>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -83,13 +94,25 @@ export class DatabaseStorage implements IStorage {
     return user;
   }
 
-  async updateUserProfile(id: string, data: { username?: string; bio?: string }): Promise<User> {
+  async updateUserProfile(id: string, data: { username?: string; bio?: string; profileImageUrl?: string }): Promise<User> {
     const [user] = await db
       .update(users)
       .set({ ...data, updatedAt: new Date() })
       .where(eq(users.id, id))
       .returning();
     return user;
+  }
+
+  async checkUsernameAvailability(username: string, currentUserId?: string): Promise<boolean> {
+    const existingUser = await db
+      .select()
+      .from(users)
+      .where(eq(users.username, username))
+      .limit(1);
+    
+    if (existingUser.length === 0) return true;
+    if (currentUserId && existingUser[0].id === currentUserId) return true;
+    return false;
   }
 
   // Post operations
@@ -128,12 +151,28 @@ export class DatabaseStorage implements IStorage {
     return await db.select().from(posts).where(eq(posts.userId, userId)).orderBy(desc(posts.createdAt));
   }
 
+  async deletePost(postId: string, userId: string): Promise<void> {
+    await db.delete(posts).where(and(eq(posts.id, postId), eq(posts.userId, userId)));
+  }
+
   async likePost(postId: string, userId: string): Promise<void> {
     await db.transaction(async (tx) => {
       await tx.insert(postLikes).values({ postId, userId });
       await tx.update(posts).set({ 
         likesCount: sql`${posts.likesCount} + 1` 
       }).where(eq(posts.id, postId));
+      
+      // Create notification for post owner
+      const [post] = await tx.select().from(posts).where(eq(posts.id, postId));
+      if (post && post.userId !== userId) {
+        await tx.insert(notifications).values({
+          userId: post.userId,
+          fromUserId: userId,
+          type: "like",
+          postId: postId,
+          message: "liked your post",
+        });
+      }
     });
   }
 
@@ -345,6 +384,51 @@ export class DatabaseStorage implements IStorage {
       .limit(limit);
 
     return result.reverse(); // Return in chronological order
+  }
+
+  // Notification operations
+  async createNotification(notification: InsertNotification): Promise<Notification> {
+    const [newNotification] = await db.insert(notifications).values(notification).returning();
+    return newNotification;
+  }
+
+  async getNotifications(userId: string, limit = 50): Promise<(Notification & { fromUser?: User; post?: Post })[]> {
+    const result = await db
+      .select({
+        id: notifications.id,
+        userId: notifications.userId,
+        fromUserId: notifications.fromUserId,
+        type: notifications.type,
+        postId: notifications.postId,
+        message: notifications.message,
+        isRead: notifications.isRead,
+        createdAt: notifications.createdAt,
+        fromUser: users,
+        post: posts,
+      })
+      .from(notifications)
+      .leftJoin(users, eq(notifications.fromUserId, users.id))
+      .leftJoin(posts, eq(notifications.postId, posts.id))
+      .where(eq(notifications.userId, userId))
+      .orderBy(desc(notifications.createdAt))
+      .limit(limit);
+
+    return result;
+  }
+
+  async markNotificationAsRead(notificationId: string): Promise<void> {
+    await db.update(notifications)
+      .set({ isRead: true })
+      .where(eq(notifications.id, notificationId));
+  }
+
+  async getUnreadNotificationCount(userId: string): Promise<number> {
+    const result = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(notifications)
+      .where(and(eq(notifications.userId, userId), eq(notifications.isRead, false)));
+    
+    return result[0]?.count || 0;
   }
 }
 
