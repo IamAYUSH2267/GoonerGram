@@ -33,6 +33,8 @@ export const users = pgTable("users", {
   profileImageUrl: varchar("profile_image_url"),
   username: varchar("username").unique().notNull(),
   bio: text("bio"),
+  usernameChangedAt: timestamp("username_changed_at"),
+  usernameChangeCount: integer("username_change_count").default(0),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });

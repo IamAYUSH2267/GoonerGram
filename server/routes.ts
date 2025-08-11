@@ -26,11 +26,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const userId = req.user.claims.sub;
       const { username, bio, profileImageUrl } = req.body;
       
-      // Check username availability if username is being updated
+      // Check username availability and change limits if username is being updated
       if (username) {
         const isAvailable = await storage.checkUsernameAvailability(username, userId);
         if (!isAvailable) {
           return res.status(409).json({ message: "Username is already taken" });
+        }
+
+        const canChange = await storage.canChangeUsername(userId);
+        if (!canChange.canChange) {
+          return res.status(429).json({ 
+            message: canChange.reason,
+            nextAllowedDate: canChange.nextAllowedDate 
+          });
         }
       }
       
@@ -47,7 +55,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { username } = req.params;
       const userId = req.user.claims.sub;
       const isAvailable = await storage.checkUsernameAvailability(username, userId);
-      res.json({ available: isAvailable });
+      const canChange = await storage.canChangeUsername(userId);
+      res.json({ 
+        available: isAvailable,
+        canChangeUsername: canChange.canChange,
+        reason: canChange.reason,
+        nextAllowedDate: canChange.nextAllowedDate 
+      });
     } catch (error) {
       console.error("Error checking username:", error);
       res.status(500).json({ message: "Failed to check username" });

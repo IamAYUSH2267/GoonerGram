@@ -95,9 +95,17 @@ export class DatabaseStorage implements IStorage {
   }
 
   async updateUserProfile(id: string, data: { username?: string; bio?: string; profileImageUrl?: string }): Promise<User> {
+    const updateData: any = { ...data, updatedAt: new Date() };
+    
+    // If username is being changed, update username change tracking
+    if (data.username) {
+      updateData.usernameChangedAt = new Date();
+      updateData.usernameChangeCount = sql`COALESCE(${users.usernameChangeCount}, 0) + 1`;
+    }
+    
     const [user] = await db
       .update(users)
-      .set({ ...data, updatedAt: new Date() })
+      .set(updateData)
       .where(eq(users.id, id))
       .returning();
     return user;
@@ -113,6 +121,34 @@ export class DatabaseStorage implements IStorage {
     if (existingUser.length === 0) return true;
     if (currentUserId && existingUser[0].id === currentUserId) return true;
     return false;
+  }
+
+  async canChangeUsername(userId: string): Promise<{ canChange: boolean; reason?: string; nextAllowedDate?: Date }> {
+    const [user] = await db.select().from(users).where(eq(users.id, userId));
+    if (!user) return { canChange: false, reason: "User not found" };
+
+    const changeCount = user.usernameChangeCount || 0;
+    const lastChange = user.usernameChangedAt;
+
+    // Allow up to 2 changes in 24 days
+    if (changeCount >= 2 && lastChange) {
+      const daysSinceLastChange = Math.floor((Date.now() - lastChange.getTime()) / (1000 * 60 * 60 * 24));
+      if (daysSinceLastChange < 24) {
+        const nextAllowedDate = new Date(lastChange.getTime() + (24 * 24 * 60 * 60 * 1000));
+        return { 
+          canChange: false, 
+          reason: "You can only change your username twice in 24 days",
+          nextAllowedDate 
+        };
+      }
+      // Reset count if 24 days have passed
+      await db.update(users).set({ 
+        usernameChangeCount: 0,
+        usernameChangedAt: null 
+      }).where(eq(users.id, userId));
+    }
+
+    return { canChange: true };
   }
 
   // Post operations
@@ -180,7 +216,7 @@ export class DatabaseStorage implements IStorage {
     await db.transaction(async (tx) => {
       await tx.delete(postLikes).where(and(eq(postLikes.postId, postId), eq(postLikes.userId, userId)));
       await tx.update(posts).set({ 
-        likesCount: sql`${posts.likesCount} - 1` 
+        likesCount: sql`GREATEST(${posts.likesCount} - 1, 0)` 
       }).where(eq(posts.id, postId));
     });
   }

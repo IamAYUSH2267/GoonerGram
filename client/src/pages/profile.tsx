@@ -1,13 +1,13 @@
 import { useAuth } from "@/hooks/useAuth";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Settings, Edit, Users, MessageSquare } from "lucide-react";
+import { Settings, Edit, Users, MessageSquare, Camera } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { isUnauthorizedError } from "@/lib/authUtils";
@@ -21,6 +21,9 @@ export default function Profile() {
   const [isEditing, setIsEditing] = useState(false);
   const [username, setUsername] = useState("");
   const [bio, setBio] = useState("");
+  const [profileImageUrl, setProfileImageUrl] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { data: userPosts } = useQuery({
     queryKey: ["/api/posts/user", user?.id],
@@ -32,7 +35,7 @@ export default function Profile() {
   });
 
   const updateProfileMutation = useMutation({
-    mutationFn: async (data: { username?: string; bio?: string }) => {
+    mutationFn: async (data: { username?: string; bio?: string; profileImageUrl?: string }) => {
       await apiRequest("PATCH", "/api/profile", data);
     },
     onSuccess: () => {
@@ -70,11 +73,38 @@ export default function Profile() {
   const handleEditProfile = () => {
     setUsername(user.username || "");
     setBio(user.bio || "");
+    setProfileImageUrl(user.profileImageUrl || "");
     setIsEditing(true);
   };
 
   const handleSaveProfile = () => {
-    updateProfileMutation.mutate({ username, bio });
+    updateProfileMutation.mutate({ username, bio, profileImageUrl });
+  };
+
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setIsUploading(true);
+    try {
+      // For demo purposes, we'll use a placeholder URL
+      // In a real app, you'd upload to a service like Cloudinary or AWS S3
+      const imageUrl = URL.createObjectURL(file);
+      setProfileImageUrl(imageUrl);
+      
+      toast({
+        title: "Image uploaded",
+        description: "Profile picture updated successfully.",
+      });
+    } catch (error) {
+      toast({
+        title: "Upload failed",
+        description: "Failed to upload image. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   return (
@@ -85,12 +115,32 @@ export default function Profile() {
         <div className="max-w-2xl mx-auto">
           {/* Profile Header */}
           <div className="text-center mb-6">
-            <Avatar className="w-24 h-24 mx-auto mb-4" data-testid="img-avatar">
-              <AvatarImage src={user.profileImageUrl || undefined} />
-              <AvatarFallback className="bg-purple-neon text-white text-2xl">
-                {user.firstName?.[0] || user.username?.[0] || "G"}
-              </AvatarFallback>
-            </Avatar>
+            <div className="relative inline-block">
+              <Avatar className="w-24 h-24 mx-auto mb-4" data-testid="img-avatar">
+                <AvatarImage src={profileImageUrl || user.profileImageUrl || undefined} />
+                <AvatarFallback className="bg-purple-neon text-white text-2xl">
+                  {user.firstName?.[0] || user.username?.[0] || "G"}
+                </AvatarFallback>
+              </Avatar>
+              {isEditing && (
+                <Button
+                  size="sm"
+                  className="absolute bottom-2 right-2 w-8 h-8 rounded-full bg-purple-neon hover:bg-purple-neon/80 p-0"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={isUploading}
+                  data-testid="button-upload-photo"
+                >
+                  <Camera className="w-4 h-4" />
+                </Button>
+              )}
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleFileUpload}
+              />
+            </div>
             
             {isEditing ? (
               <div className="space-y-3">

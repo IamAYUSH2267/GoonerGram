@@ -79,10 +79,11 @@ export default function NotificationsModal({ isOpen, onClose }: NotificationsMod
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-darker-navy border-glass-border max-w-md max-h-[80vh] overflow-hidden" data-testid="modal-notifications">
+      <DialogContent className="bg-darker-navy border-glass-border max-w-md max-h-[80vh] overflow-hidden" data-testid="modal-notifications" aria-describedby="notifications-description">
         <DialogHeader>
           <DialogTitle className="gradient-text text-center">Notifications</DialogTitle>
         </DialogHeader>
+        <p id="notifications-description" className="sr-only">View and manage your notifications</p>
         
         <div className="max-h-96 overflow-y-auto space-y-3 pr-2" data-testid="notifications-list">
           {isLoading ? (
