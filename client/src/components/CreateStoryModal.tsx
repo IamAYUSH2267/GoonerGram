@@ -2,18 +2,19 @@ import { useState, useRef } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Camera, Video, X } from "lucide-react";
+import { Camera, Video, Type, X } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { isUnauthorizedError } from "@/lib/authUtils";
 
-interface CreatePostModalProps {
+interface CreateStoryModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-export default function CreatePostModal({ isOpen, onClose }: CreatePostModalProps) {
+export default function CreateStoryModal({ isOpen, onClose }: CreateStoryModalProps) {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [content, setContent] = useState("");
@@ -24,17 +25,17 @@ export default function CreatePostModal({ isOpen, onClose }: CreatePostModalProp
   const fileInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
 
-  const createPostMutation = useMutation({
+  const createStoryMutation = useMutation({
     mutationFn: async (data: { content?: string; imageUrl?: string; videoUrl?: string }) => {
-      await apiRequest("POST", "/api/posts", data);
+      await apiRequest("POST", "/api/stories", data);
     },
     onSuccess: () => {
       toast({
-        title: "Post created",
-        description: "Your post has been created successfully.",
+        title: "Story posted",
+        description: "Your 24-hour story has been posted successfully.",
       });
       handleClose();
-      queryClient.invalidateQueries({ queryKey: ["/api/posts"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/stories"] });
     },
     onError: (error) => {
       if (isUnauthorizedError(error)) {
@@ -50,7 +51,7 @@ export default function CreatePostModal({ isOpen, onClose }: CreatePostModalProp
       }
       toast({
         title: "Error",
-        description: "Failed to create post.",
+        description: "Failed to post story.",
         variant: "destructive",
       });
     },
@@ -96,27 +97,27 @@ export default function CreatePostModal({ isOpen, onClose }: CreatePostModalProp
     if (!content.trim() && !mediaFile) {
       toast({
         title: "Content required",
-        description: "Please add some content or media to your post.",
+        description: "Please add some content or media to your story.",
         variant: "destructive",
       });
       return;
     }
 
-    const postData: { content?: string; imageUrl?: string; videoUrl?: string } = {};
+    const storyData: { content?: string; imageUrl?: string; videoUrl?: string } = {};
     
     if (content.trim()) {
-      postData.content = content;
+      storyData.content = content;
     }
     
     if (mediaFile && mediaPreview) {
       if (mediaType === "image") {
-        postData.imageUrl = mediaPreview;
+        storyData.imageUrl = mediaPreview;
       } else if (mediaType === "video") {
-        postData.videoUrl = mediaPreview;
+        storyData.videoUrl = mediaPreview;
       }
     }
 
-    createPostMutation.mutate(postData);
+    createStoryMutation.mutate(storyData);
   };
 
   const removeMedia = () => {
@@ -130,11 +131,11 @@ export default function CreatePostModal({ isOpen, onClose }: CreatePostModalProp
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="bg-darker-navy border-glass-border max-w-md" data-testid="modal-create-post" aria-describedby="create-post-description">
+      <DialogContent className="bg-darker-navy border-glass-border max-w-md" data-testid="modal-create-story" aria-describedby="create-story-description">
         <DialogHeader>
-          <DialogTitle className="gradient-text text-center">Create Post</DialogTitle>
+          <DialogTitle className="gradient-text text-center">Create Story</DialogTitle>
         </DialogHeader>
-        <p id="create-post-description" className="sr-only">Create a new post with text, photos, or videos</p>
+        <p id="create-story-description" className="sr-only">Create a 24-hour story with text, photos, or videos</p>
         
         <div className="space-y-4">
           {/* Media Preview */}
@@ -143,7 +144,7 @@ export default function CreatePostModal({ isOpen, onClose }: CreatePostModalProp
               {mediaType === "image" ? (
                 <img
                   src={mediaPreview}
-                  alt="Post preview"
+                  alt="Story preview"
                   className="w-full h-48 object-cover rounded-lg"
                 />
               ) : (
@@ -169,10 +170,10 @@ export default function CreatePostModal({ isOpen, onClose }: CreatePostModalProp
           <Textarea
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            placeholder="What's on your mind?"
+            placeholder="Share what's happening in your day..."
             className="bg-darker-navy border-glass-border resize-none"
-            rows={4}
-            data-testid="input-post-content"
+            rows={3}
+            data-testid="input-story-content"
           />
 
           {/* Media Buttons */}
@@ -207,17 +208,17 @@ export default function CreatePostModal({ isOpen, onClose }: CreatePostModalProp
               variant="outline"
               onClick={handleClose}
               className="border-glass-border"
-              data-testid="button-cancel-post"
+              data-testid="button-cancel-story"
             >
               Cancel
             </Button>
             <Button
               onClick={handleSubmit}
-              disabled={createPostMutation.isPending}
+              disabled={createStoryMutation.isPending}
               className="floating-btn hover-glow"
-              data-testid="button-create-post"
+              data-testid="button-post-story"
             >
-              Post
+              Post Story
             </Button>
           </div>
         </div>
