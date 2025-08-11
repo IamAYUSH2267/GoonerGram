@@ -35,6 +35,7 @@ export default function CreatePostModal({ isOpen, onClose }: CreatePostModalProp
       });
       handleClose();
       queryClient.invalidateQueries({ queryKey: ["/api/posts"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/posts/user"] });
     },
     onError: (error) => {
       if (isUnauthorizedError(error)) {

@@ -6,13 +6,13 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Settings, Edit, Users, MessageSquare, Camera } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { isUnauthorizedError } from "@/lib/authUtils";
 import BottomNavigation from "@/components/BottomNavigation";
 import Header from "@/components/Header";
+import UserAvatar from "@/components/UserAvatar";
 
 export default function Profile() {
   const { user, isLoading } = useAuth();
@@ -44,7 +44,15 @@ export default function Profile() {
         description: "Your profile has been updated successfully.",
       });
       setIsEditing(false);
+      // Invalidate all queries that might contain user data to update profile photo everywhere
       queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/posts"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/posts/user"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/stories"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/chats"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/global/messages"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/partners"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/notifications"] });
     },
     onError: (error) => {
       if (isUnauthorizedError(error)) {
@@ -116,12 +124,15 @@ export default function Profile() {
           {/* Profile Header */}
           <div className="text-center mb-6">
             <div className="relative inline-block">
-              <Avatar className="w-24 h-24 mx-auto mb-4" data-testid="img-avatar">
-                <AvatarImage src={profileImageUrl || user.profileImageUrl || undefined} />
-                <AvatarFallback className="bg-purple-neon text-white text-2xl">
-                  {user.firstName?.[0] || user.username?.[0] || "G"}
-                </AvatarFallback>
-              </Avatar>
+              <UserAvatar 
+                user={{ 
+                  ...user, 
+                  profileImageUrl: profileImageUrl || user.profileImageUrl 
+                }} 
+                size="xl" 
+                className="mx-auto mb-4" 
+                data-testid="img-avatar" 
+              />
               {isEditing && (
                 <Button
                   size="sm"
@@ -274,12 +285,7 @@ export default function Profile() {
                     <Card key={partner.id} className="glass-effect border-glass-border" data-testid={`card-partner-${partner.id}`}>
                       <CardContent className="p-4">
                         <div className="flex items-center space-x-3">
-                          <Avatar>
-                            <AvatarImage src={partner.profileImageUrl || undefined} />
-                            <AvatarFallback className="bg-purple-neon text-white">
-                              {partner.firstName?.[0] || partner.username?.[0] || "G"}
-                            </AvatarFallback>
-                          </Avatar>
+                          <UserAvatar user={partner} size="md" />
                           <div className="flex-1">
                             <h3 className="font-semibold">{partner.username || `${partner.firstName} ${partner.lastName}`}</h3>
                             <p className="text-sm text-muted-foreground">{partner.bio}</p>

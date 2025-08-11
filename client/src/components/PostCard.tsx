@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -15,6 +14,7 @@ import { useToast } from "@/hooks/use-toast";
 import { isUnauthorizedError } from "@/lib/authUtils";
 import { formatDistanceToNow } from "date-fns";
 import { useAuth } from "@/hooks/useAuth";
+import UserAvatar from "./UserAvatar";
 
 interface Post {
   id: string;
@@ -130,12 +130,7 @@ export default function PostCard({ post }: PostCardProps) {
       {/* Post Header */}
       <div className="flex items-center justify-between p-4">
         <div className="flex items-center space-x-3">
-          <Avatar>
-            <AvatarImage src={post.user.profileImageUrl || undefined} />
-            <AvatarFallback className="bg-purple-neon text-white">
-              {post.user.firstName?.[0] || post.user.username?.[0] || "U"}
-            </AvatarFallback>
-          </Avatar>
+          <UserAvatar user={post.user} size="md" />
           <div>
             <h3 className="font-semibold text-sm" data-testid={`text-username-${post.id}`}>
               {post.user.username || `${post.user.firstName} ${post.user.lastName}` || "User"}

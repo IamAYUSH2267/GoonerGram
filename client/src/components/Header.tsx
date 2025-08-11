@@ -4,6 +4,8 @@ import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Heart, MessageSquare } from "lucide-react";
 import NotificationsModal from "./NotificationsModal";
+import UserAvatar from "./UserAvatar";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function Header() {
   const [location, navigate] = useLocation();
