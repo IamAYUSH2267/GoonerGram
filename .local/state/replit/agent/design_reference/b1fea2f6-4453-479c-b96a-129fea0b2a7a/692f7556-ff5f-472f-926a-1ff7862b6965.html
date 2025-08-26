@@ -1,0 +1,397 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gooners - Connect with your Gooning Partners</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'dark-primary': '#0F0F0F',
+                        'dark-secondary': '#1A1A1A',
+                        'dark-tertiary': '#2D2D2D',
+                        'accent-purple': '#8B5CF6',
+                        'accent-blue': '#3B82F6',
+                        'text-primary': '#FFFFFF',
+                        'text-secondary': '#A1A1AA',
+                        'success': '#10B981',
+                        'warning': '#F59E0B'
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-dark-primary text-text-primary font-inter min-h-screen">
+    <!-- @COMPONENT: AppContainer -->
+    <div class="max-w-md mx-auto bg-dark-primary min-h-screen relative">
+        
+        <!-- @COMPONENT: Header -->
+        <header class="bg-dark-secondary p-4 flex items-center justify-between border-b border-dark-tertiary">
+            <div class="flex items-center space-x-3">
+                <h1 class="text-2xl font-bold text-accent-purple">Gooners</h1>
+                <div class="w-2 h-2 bg-success rounded-full animate-pulse"></div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button class="relative" data-event="click:openNotifications">
+                    <i class="fas fa-bell text-xl text-text-secondary hover:text-accent-purple transition-colors"></i>
+                    <span class="absolute -top-1 -right-1 w-3 h-3 bg-warning rounded-full text-xs flex items-center justify-center text-dark-primary font-semibold" data-mock="true">3</span>
+                </button>
+                <button data-event="click:openGlobalChat">
+                    <i class="fas fa-globe text-xl text-text-secondary hover:text-accent-blue transition-colors"></i>
+                </button>
+            </div>
+        </header>
+        <!-- @END_COMPONENT: Header -->
+
+        <!-- @COMPONENT: StatusCarousel -->
+        <div class="bg-dark-secondary p-4 border-b border-dark-tertiary">
+            <h3 class="text-sm font-semibold text-text-secondary mb-3">Gooning Partners Status</h3>
+            <div class="flex space-x-4 overflow-x-auto pb-2">
+                <!-- @MAP: gooning_partners.map(partner => ( -->
+                
+                <!-- Your Story -->
+                <div class="flex flex-col items-center space-y-2 min-w-16">
+                    <div class="relative">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-tr from-accent-purple to-accent-blue p-0.5">
+                            <!-- Current user profile image -->
+                            <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&h=200" alt="Your profile" class="w-full h-full rounded-full object-cover border-2 border-dark-primary" data-mock-image="true">
+                        </div>
+                        <button class="absolute -bottom-1 -right-1 w-6 h-6 bg-accent-purple rounded-full flex items-center justify-center text-xs font-bold" data-event="click:addStatus">
+                            <i class="fas fa-plus text-white"></i>
+                        </button>
+                    </div>
+                    <span class="text-xs text-text-secondary font-medium">Your Story</span>
+                </div>
+
+                <!-- Gooning Partners Stories -->
+                <div class="flex flex-col items-center space-y-2 min-w-16" data-mock="true">
+                    <div class="w-16 h-16 rounded-full bg-gradient-to-tr from-accent-purple to-accent-blue p-0.5">
+                        <!-- Partner profile showing mountain landscape photographer -->
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&h=200" alt="Gooning partner Alex" class="w-full h-full rounded-full object-cover border-2 border-dark-primary">
+                    </div>
+                    <span class="text-xs text-text-secondary font-medium" data-bind="partner.username">alex_goon</span>
+                </div>
+
+                <div class="flex flex-col items-center space-y-2 min-w-16" data-mock="true">
+                    <div class="w-16 h-16 rounded-full bg-gradient-to-tr from-accent-blue to-success p-0.5">
+                        <!-- Partner profile showing urban street photographer -->
+                        <img src="https://pixabay.com/get/gc2160547629a7c15aab1a153c9489cb1223c992dc892f77947a7d25c8bd757f645aa758c9ce62f772445e6278c04848e3d863a20c13555e1e07053cb3dfa087b_1280.jpg" alt="Gooning partner Maya" class="w-full h-full rounded-full object-cover border-2 border-dark-primary">
+                    </div>
+                    <span class="text-xs text-text-secondary font-medium" data-bind="partner.username">maya_vibes</span>
+                </div>
+
+                <div class="flex flex-col items-center space-y-2 min-w-16" data-mock="true">
+                    <div class="w-16 h-16 rounded-full bg-gray-600 p-0.5">
+                        <!-- Partner profile showing nature photographer -->
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&h=200" alt="Gooning partner Sam" class="w-full h-full rounded-full object-cover border-2 border-dark-primary opacity-60">
+                    </div>
+                    <span class="text-xs text-text-secondary font-medium" data-bind="partner.username">sam_24h</span>
+                </div>
+
+                <div class="flex flex-col items-center space-y-2 min-w-16" data-mock="true">
+                    <div class="w-16 h-16 rounded-full bg-gradient-to-tr from-warning to-accent-purple p-0.5">
+                        <!-- Partner profile showing travel photographer -->
+                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&h=200" alt="Gooning partner Jordan" class="w-full h-full rounded-full object-cover border-2 border-dark-primary">
+                    </div>
+                    <span class="text-xs text-text-secondary font-medium" data-bind="partner.username">jordan_live</span>
+                </div>
+                
+                <!-- @END_MAP )) -->
+            </div>
+        </div>
+        <!-- @END_COMPONENT: StatusCarousel -->
+
+        <!-- @COMPONENT: ContentFeed -->
+        <main class="pb-20 px-4">
+            <div class="py-4">
+                <h2 class="text-lg font-semibold text-text-primary mb-4">Latest Goonings</h2>
+                
+                <!-- @MAP: posts.map(post => ( -->
+                
+                <!-- Post 1 -->
+                <article class="mb-6 bg-dark-secondary rounded-xl overflow-hidden" data-mock="true">
+                    <div class="p-4 flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <!-- Post author showing tech professional -->
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100" alt="alex_goon profile" class="w-10 h-10 rounded-full object-cover">
+                            <div>
+                                <h4 class="font-semibold text-sm" data-bind="post.author.username">alex_goon</h4>
+                                <p class="text-xs text-text-secondary" data-bind="post.timestamp">2 hours ago</p>
+                            </div>
+                        </div>
+                        <button class="text-text-secondary hover:text-text-primary" data-event="click:openPostMenu">
+                            <i class="fas fa-ellipsis-h"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Post content showing stunning mountain landscape -->
+                    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600" alt="Beautiful mountain landscape with snow-capped peaks" class="w-full h-80 object-cover" data-mock-image="true">
+                    
+                    <div class="p-4">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="flex items-center space-x-4">
+                                <button class="text-accent-purple hover:scale-110 transition-transform" data-event="click:toggleLike">
+                                    <i class="fas fa-heart text-xl"></i>
+                                </button>
+                                <button class="text-text-secondary hover:text-accent-blue transition-colors" data-event="click:openComments">
+                                    <i class="fas fa-comment text-xl"></i>
+                                </button>
+                                <button class="text-text-secondary hover:text-accent-blue transition-colors" data-event="click:sharePost">
+                                    <i class="fas fa-share text-xl"></i>
+                                </button>
+                            </div>
+                            <button class="text-text-secondary hover:text-warning transition-colors" data-event="click:bookmarkPost">
+                                <i class="fas fa-bookmark text-xl"></i>
+                            </button>
+                        </div>
+                        
+                        <p class="text-sm font-semibold mb-1" data-bind="post.likes">127 likes</p>
+                        <div class="text-sm">
+                            <span class="font-semibold" data-bind="post.author.username">alex_goon</span>
+                            <span class="ml-2" data-bind="post.caption" data-mock="true">Amazing mountain adventure with the crew! Nothing beats these views 🏔️ #gooning #nature</span>
+                        </div>
+                        <button class="text-text-secondary text-sm mt-1" data-event="click:viewAllComments" data-mock="true">View all 23 comments</button>
+                    </div>
+                </article>
+
+                <!-- Post 2 - Video Post -->
+                <article class="mb-6 bg-dark-secondary rounded-xl overflow-hidden" data-mock="true">
+                    <div class="p-4 flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <!-- Post author showing creative professional -->
+                            <img src="https://pixabay.com/get/gd82ae08e3f8405db337e4bd9deceaaf62e00552f15997c1e950fc388c95a006c21d58acfa66100d9f31da8ee7315cb239f6a93a36a5acfd2cec8a99ef4006d2b_1280.jpg" alt="maya_vibes profile" class="w-10 h-10 rounded-full object-cover">
+                            <div>
+                                <h4 class="font-semibold text-sm" data-bind="post.author.username">maya_vibes</h4>
+                                <p class="text-xs text-text-secondary" data-bind="post.timestamp">5 hours ago</p>
+                            </div>
+                        </div>
+                        <button class="text-text-secondary hover:text-text-primary" data-event="click:openPostMenu">
+                            <i class="fas fa-ellipsis-h"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Video post content showing urban street art scene -->
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1541961017774-22349e4a1262?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600" alt="Vibrant urban street art with colorful murals" class="w-full h-80 object-cover" data-mock-image="true">
+                        <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30">
+                            <button class="w-16 h-16 bg-black bg-opacity-50 rounded-full flex items-center justify-center" data-event="click:playVideo">
+                                <i class="fas fa-play text-white text-xl ml-1"></i>
+                            </button>
+                        </div>
+                        <div class="absolute top-4 right-4 bg-black bg-opacity-70 px-2 py-1 rounded text-xs text-white font-medium">
+                            1:24
+                        </div>
+                    </div>
+                    
+                    <div class="p-4">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="flex items-center space-x-4">
+                                <button class="text-accent-purple hover:scale-110 transition-transform" data-event="click:toggleLike">
+                                    <i class="fas fa-heart text-xl"></i>
+                                </button>
+                                <button class="text-text-secondary hover:text-accent-blue transition-colors" data-event="click:openComments">
+                                    <i class="fas fa-comment text-xl"></i>
+                                </button>
+                                <button class="text-text-secondary hover:text-accent-blue transition-colors" data-event="click:sharePost">
+                                    <i class="fas fa-share text-xl"></i>
+                                </button>
+                            </div>
+                            <button class="text-text-secondary hover:text-warning transition-colors" data-event="click:bookmarkPost">
+                                <i class="fas fa-bookmark text-xl"></i>
+                            </button>
+                        </div>
+                        
+                        <p class="text-sm font-semibold mb-1" data-bind="post.likes">89 likes</p>
+                        <div class="text-sm">
+                            <span class="font-semibold" data-bind="post.author.username">maya_vibes</span>
+                            <span class="ml-2" data-bind="post.caption" data-mock="true">Street art session with the gooning squad! 🎨 Watch till the end for the reveal!</span>
+                        </div>
+                        <button class="text-text-secondary text-sm mt-1" data-event="click:viewAllComments" data-mock="true">View all 12 comments</button>
+                    </div>
+                </article>
+
+                <!-- Post 3 -->
+                <article class="mb-6 bg-dark-secondary rounded-xl overflow-hidden" data-mock="true">
+                    <div class="p-4 flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <!-- Post author showing outdoor enthusiast -->
+                            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100" alt="sam_24h profile" class="w-10 h-10 rounded-full object-cover">
+                            <div>
+                                <h4 class="font-semibold text-sm" data-bind="post.author.username">sam_24h</h4>
+                                <p class="text-xs text-text-secondary" data-bind="post.timestamp">8 hours ago</p>
+                            </div>
+                        </div>
+                        <button class="text-text-secondary hover:text-text-primary" data-event="click:openPostMenu">
+                            <i class="fas fa-ellipsis-h"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Post content showing serene beach sunset -->
+                    <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600" alt="Peaceful beach at sunset with golden hour lighting" class="w-full h-80 object-cover" data-mock-image="true">
+                    
+                    <div class="p-4">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="flex items-center space-x-4">
+                                <button class="text-text-secondary hover:text-accent-purple transition-colors" data-event="click:toggleLike">
+                                    <i class="far fa-heart text-xl"></i>
+                                </button>
+                                <button class="text-text-secondary hover:text-accent-blue transition-colors" data-event="click:openComments">
+                                    <i class="fas fa-comment text-xl"></i>
+                                </button>
+                                <button class="text-text-secondary hover:text-accent-blue transition-colors" data-event="click:sharePost">
+                                    <i class="fas fa-share text-xl"></i>
+                                </button>
+                            </div>
+                            <button class="text-text-secondary hover:text-warning transition-colors" data-event="click:bookmarkPost">
+                                <i class="fas fa-bookmark text-xl"></i>
+                            </button>
+                        </div>
+                        
+                        <p class="text-sm font-semibold mb-1" data-bind="post.likes">45 likes</p>
+                        <div class="text-sm">
+                            <span class="font-semibold" data-bind="post.author.username">sam_24h</span>
+                            <span class="ml-2" data-bind="post.caption" data-mock="true">Perfect ending to a gooning session by the beach 🌅 Peace and good vibes!</span>
+                        </div>
+                        <button class="text-text-secondary text-sm mt-1" data-event="click:viewAllComments" data-mock="true">View all 7 comments</button>
+                    </div>
+                </article>
+                
+                <!-- @END_MAP )) -->
+            </div>
+        </main>
+        <!-- @END_COMPONENT: ContentFeed -->
+
+        <!-- @COMPONENT: BottomNavigation -->
+        <nav class="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-md bg-dark-secondary border-t border-dark-tertiary">
+            <div class="flex items-center justify-around py-3">
+                <button class="flex flex-col items-center space-y-1 text-accent-purple" data-event="click:navigateHome" data-implementation="Active state">
+                    <i class="fas fa-home text-xl"></i>
+                    <span class="text-xs font-medium">Home</span>
+                </button>
+                
+                <button class="flex flex-col items-center space-y-1 text-text-secondary hover:text-accent-blue transition-colors" data-event="click:navigateGoonings">
+                    <i class="fas fa-compass text-xl"></i>
+                    <span class="text-xs font-medium">Goonings</span>
+                </button>
+                
+                <button class="flex flex-col items-center space-y-1 text-text-secondary hover:text-accent-purple transition-colors" data-event="click:createPost">
+                    <div class="w-8 h-8 bg-gradient-to-tr from-accent-purple to-accent-blue rounded-lg flex items-center justify-center">
+                        <i class="fas fa-plus text-white text-sm"></i>
+                    </div>
+                    <span class="text-xs font-medium">Post</span>
+                </button>
+                
+                <button class="flex flex-col items-center space-y-1 text-text-secondary hover:text-accent-blue transition-colors relative" data-event="click:openChats">
+                    <i class="fas fa-comments text-xl"></i>
+                    <span class="text-xs font-medium">Chats</span>
+                    <div class="absolute -top-1 -right-1 w-3 h-3 bg-warning rounded-full text-xs flex items-center justify-center" data-mock="true"></div>
+                </button>
+                
+                <button class="flex flex-col items-center space-y-1 text-text-secondary hover:text-accent-blue transition-colors" data-event="click:openProfile">
+                    <!-- Current user profile in nav -->
+                    <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&auto=format&fit=crop&w=50&h=50" alt="Your profile" class="w-6 h-6 rounded-full object-cover border border-text-secondary" data-mock-image="true">
+                    <span class="text-xs font-medium">Profile</span>
+                </button>
+            </div>
+        </nav>
+        <!-- @END_COMPONENT: BottomNavigation -->
+
+        <!-- @COMPONENT: FloatingActionButton -->
+        <button class="fixed bottom-24 right-4 w-14 h-14 bg-gradient-to-tr from-accent-purple to-accent-blue rounded-full shadow-lg flex items-center justify-center text-white hover:scale-110 transition-transform" data-event="click:quickAction" data-implementation="Quick post or camera access">
+            <i class="fas fa-camera text-xl"></i>
+        </button>
+        <!-- @END_COMPONENT: FloatingActionButton -->
+    </div>
+    <!-- @END_COMPONENT: AppContainer -->
+
+    <!-- @COMPONENT: GlobalChatModal (Hidden by default) -->
+    <div class="hidden fixed inset-0 bg-black bg-opacity-50 z-50" data-implementation="Global chat overlay" data-state="isGlobalChatOpen:boolean = false">
+        <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-md bg-dark-secondary rounded-t-2xl h-3/4">
+            <div class="p-4 border-b border-dark-tertiary flex items-center justify-between">
+                <h3 class="font-bold text-lg">Global Chat</h3>
+                <button class="text-text-secondary hover:text-text-primary" data-event="click:closeGlobalChat">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="h-full overflow-y-auto pb-20 p-4" data-implementation="Chat messages container">
+                <!-- Chat messages would be rendered here -->
+                <div class="text-center text-text-secondary py-8" data-mock="true">
+                    <i class="fas fa-globe text-4xl mb-4 text-accent-blue"></i>
+                    <p>Connect with gooners worldwide!</p>
+                    <p class="text-sm mt-2">No restrictions, full freedom of speech</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- @END_COMPONENT: GlobalChatModal -->
+
+    <script>
+        // TODO: Implement navigation logic, state management, and API integration
+        (function() {
+            // Navigation state management
+            const navigation = {
+                currentPage: 'home',
+                navigate: function(page) {
+                    this.currentPage = page;
+                    // Update UI accordingly
+                }
+            };
+
+            // Status carousel functionality
+            const statusCarousel = {
+                partners: [],
+                loadStatuses: function() {
+                    // TODO: Load gooning partner statuses
+                },
+                addStatus: function() {
+                    // TODO: Open status creation modal
+                }
+            };
+
+            // Post interaction handlers
+            const postInteractions = {
+                toggleLike: function(postId) {
+                    // TODO: Toggle like status and update UI
+                },
+                openComments: function(postId) {
+                    // TODO: Navigate to comments view
+                },
+                sharePost: function(postId) {
+                    // TODO: Open share modal
+                }
+            };
+
+            // Chat functionality
+            const chatSystem = {
+                openGlobalChat: function() {
+                    // TODO: Open global chat modal
+                },
+                openPrivateChat: function(partnerId) {
+                    // TODO: Navigate to private chat
+                },
+                createGroup: function() {
+                    // TODO: Open group creation modal
+                }
+            };
+
+            // Content creation
+            const contentCreation = {
+                createPost: function() {
+                    // TODO: Open post creation modal with photo/video options
+                },
+                quickCamera: function() {
+                    // TODO: Quick access to camera for instant posting
+                }
+            };
+        })();
+    </script>
+</body>
+</html>

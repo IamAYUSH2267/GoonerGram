@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gooners - Social Media Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-dark': '#262626',
+                        'secondary-dark': '#363636',
+                        'accent-blue': '#0095F6',
+                        'accent-pink': '#E4405F',
+                        'text-light': '#FAFAFA',
+                        'text-muted': '#8E8E8E',
+                        'success': '#00D924',
+                        'error': '#ED4956'
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        };
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-black text-text-light font-inter">
+    <!-- @COMPONENT: MainApp -->
+    <div class="max-w-md mx-auto bg-black min-h-screen relative">
+        
+        <!-- @COMPONENT: Header -->
+        <header class="sticky top-0 z-50 bg-black border-b border-secondary-dark px-4 py-3">
+            <div class="flex items-center justify-between">
+                <h1 class="text-2xl font-bold bg-gradient-to-r from-accent-pink to-accent-blue bg-clip-text text-transparent">
+                    Gooners
+                </h1>
+                <div class="flex items-center space-x-4">
+                    <button class="text-text-light hover:text-accent-blue transition-colors">
+                        <i class="fas fa-heart text-xl"></i>
+                    </button>
+                    <button class="text-text-light hover:text-accent-blue transition-colors">
+                        <i class="fas fa-paper-plane text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+        <!-- @END_COMPONENT: Header -->
+
+        <!-- @COMPONENT: StoriesSection -->
+        <div class="px-4 py-3 border-b border-secondary-dark">
+            <div class="flex space-x-3 overflow-x-auto scrollbar-hide">
+                <!-- Your Story -->
+                <div class="flex flex-col items-center space-y-1 flex-shrink-0">
+                    <div class="relative">
+                        <!-- User's profile photo -->
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&w=150&h=150&fit=crop" 
+                             alt="Your profile" 
+                             class="w-16 h-16 rounded-full object-cover border-2 border-text-muted" 
+                             data-mock="true">
+                        <div class="absolute bottom-0 right-0 bg-accent-blue rounded-full p-1">
+                            <i class="fas fa-plus text-white text-xs"></i>
+                        </div>
+                    </div>
+                    <span class="text-xs text-text-muted">Your Story</span>
+                </div>
+
+                <!-- @MAP: friends.map(friend => ( -->
+                <!-- Friend story 1 -->
+                <div class="flex flex-col items-center space-y-1 flex-shrink-0">
+                    <div class="p-0.5 bg-gradient-to-tr from-accent-pink to-accent-blue rounded-full">
+                        <!-- Friend's profile photo with story indicator gradient -->
+                        <img src="https://pixabay.com/get/g0147aa113a51f2d8fc3434a9c6a0c1c29b5aaf6f6574ddac76e0b47f47f3a15ad326c93be8fdd77a0108fde1b5cc91cbcee602196c6d01f1c20a54e6c35ab520_1280.jpg" 
+                             alt="Friend profile" 
+                             class="w-16 h-16 rounded-full object-cover border-2 border-black" 
+                             data-mock="true">
+                    </div>
+                    <span class="text-xs text-text-muted" data-bind="friend.username">alex_g</span>
+                </div>
+
+                <!-- Friend story 2 -->
+                <div class="flex flex-col items-center space-y-1 flex-shrink-0">
+                    <div class="p-0.5 bg-gradient-to-tr from-accent-pink to-accent-blue rounded-full">
+                        <!-- Another friend's profile photo -->
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&w=150&h=150&fit=crop" 
+                             alt="Friend profile" 
+                             class="w-16 h-16 rounded-full object-cover border-2 border-black" 
+                             data-mock="true">
+                    </div>
+                    <span class="text-xs text-text-muted" data-bind="friend.username">mike_22</span>
+                </div>
+
+                <!-- Friend story 3 -->
+                <div class="flex flex-col items-center space-y-1 flex-shrink-0">
+                    <div class="p-0.5 bg-gradient-to-tr from-accent-pink to-accent-blue rounded-full">
+                        <!-- Third friend's profile photo -->
+                        <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-4.0.3&w=150&h=150&fit=crop" 
+                             alt="Friend profile" 
+                             class="w-16 h-16 rounded-full object-cover border-2 border-black" 
+                             data-mock="true">
+                    </div>
+                    <span class="text-xs text-text-muted" data-bind="friend.username">sarah_k</span>
+                </div>
+
+                <!-- Friend story 4 -->
+                <div class="flex flex-col items-center space-y-1 flex-shrink-0">
+                    <div class="p-0.5 bg-gradient-to-tr from-accent-pink to-accent-blue rounded-full">
+                        <!-- Fourth friend's profile photo -->
+                        <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?ixlib=rb-4.0.3&w=150&h=150&fit=crop" 
+                             alt="Friend profile" 
+                             class="w-16 h-16 rounded-full object-cover border-2 border-black" 
+                             data-mock="true">
+                    </div>
+                    <span class="text-xs text-text-muted" data-bind="friend.username">david_m</span>
+                </div>
+                <!-- @END_MAP )) -->
+            </div>
+        </div>
+        <!-- @END_COMPONENT: StoriesSection -->
+
+        <!-- @COMPONENT: FeedSection -->
+        <main class="pb-20">
+            <!-- @MAP: posts.map(post => ( -->
+            <!-- Post 1 -->
+            <article class="border-b border-secondary-dark">
+                <!-- Post Header -->
+                <div class="flex items-center justify-between p-4">
+                    <div class="flex items-center space-x-3">
+                        <!-- Post author's profile photo -->
+                        <img src="https://pixabay.com/get/ge419c64e16151a6a0008f523a6dee82f5aad7e84e942add32159cdd18c3512685f2652f0e79167fb2158807561df8c0cc96a50df329a76fcff68815cd6730e7b_1280.jpg" 
+                             alt="Post author" 
+                             class="w-8 h-8 rounded-full object-cover" 
+                             data-mock="true">
+                        <div>
+                            <span class="font-semibold text-sm" data-bind="post.author">alex_g</span>
+                            <div class="text-xs text-text-muted">2 hours ago</div>
+                        </div>
+                    </div>
+                    <button class="text-text-light hover:text-accent-blue transition-colors">
+                        <i class="fas fa-ellipsis-h"></i>
+                    </button>
+                </div>
+
+                <!-- Post Content -->
+                <div class="relative">
+                    <!-- A beautiful sunset over a mountain landscape with vibrant orange and pink colors -->
+                    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&w=800&h=800&fit=crop" 
+                         alt="Beautiful sunset over mountains" 
+                         class="w-full aspect-square object-cover" 
+                         data-mock="true">
+                    <div class="absolute top-3 right-3 bg-black bg-opacity-50 rounded-full p-2">
+                        <i class="fas fa-bookmark text-white text-sm"></i>
+                    </div>
+                </div>
+
+                <!-- Post Actions -->
+                <div class="p-4">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center space-x-4">
+                            <button class="text-text-light hover:text-accent-pink transition-colors" data-event="click:toggleLike">
+                                <i class="far fa-heart text-xl"></i>
+                            </button>
+                            <button class="text-text-light hover:text-accent-blue transition-colors">
+                                <i class="far fa-comment text-xl"></i>
+                            </button>
+                            <button class="text-text-light hover:text-accent-blue transition-colors">
+                                <i class="far fa-paper-plane text-xl"></i>
+                            </button>
+                        </div>
+                        <button class="text-text-light hover:text-accent-blue transition-colors">
+                            <i class="far fa-bookmark text-xl"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="mb-2">
+                        <span class="font-semibold text-sm" data-bind="post.likes">142 likes</span>
+                    </div>
+                    
+                    <div class="text-sm">
+                        <span class="font-semibold" data-bind="post.author">alex_g</span>
+                        <span class="ml-2" data-bind="post.caption" data-mock="true">Amazing sunset from my trip! 🌅 #nature #photography</span>
+                    </div>
+                    
+                    <button class="text-text-muted text-sm mt-1">View all 23 comments</button>
+                </div>
+            </article>
+
+            <!-- Post 2 -->
+            <article class="border-b border-secondary-dark">
+                <!-- Post Header -->
+                <div class="flex items-center justify-between p-4">
+                    <div class="flex items-center space-x-3">
+                        <!-- Second post author's profile photo -->
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&w=150&h=150&fit=crop" 
+                             alt="Post author" 
+                             class="w-8 h-8 rounded-full object-cover" 
+                             data-mock="true">
+                        <div>
+                            <span class="font-semibold text-sm" data-bind="post.author">mike_22</span>
+                            <div class="text-xs text-text-muted">4 hours ago</div>
+                        </div>
+                    </div>
+                    <button class="text-text-light hover:text-accent-blue transition-colors">
+                        <i class="fas fa-ellipsis-h"></i>
+                    </button>
+                </div>
+
+                <!-- Post Content -->
+                <div class="relative">
+                    <!-- A modern coffee shop interior with exposed brick walls and cozy lighting -->
+                    <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?ixlib=rb-4.0.3&w=800&h=800&fit=crop" 
+                         alt="Cozy coffee shop interior" 
+                         class="w-full aspect-square object-cover" 
+                         data-mock="true">
+                </div>
+
+                <!-- Post Actions -->
+                <div class="p-4">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center space-x-4">
+                            <button class="text-accent-pink transition-colors" data-event="click:toggleLike">
+                                <i class="fas fa-heart text-xl"></i>
+                            </button>
+                            <button class="text-text-light hover:text-accent-blue transition-colors">
+                                <i class="far fa-comment text-xl"></i>
+                            </button>
+                            <button class="text-text-light hover:text-accent-blue transition-colors">
+                                <i class="far fa-paper-plane text-xl"></i>
+                            </button>
+                        </div>
+                        <button class="text-text-light hover:text-accent-blue transition-colors">
+                            <i class="far fa-bookmark text-xl"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="mb-2">
+                        <span class="font-semibold text-sm" data-bind="post.likes">89 likes</span>
+                    </div>
+                    
+                    <div class="text-sm">
+                        <span class="font-semibold" data-bind="post.author">mike_22</span>
+                        <span class="ml-2" data-bind="post.caption" data-mock="true">Perfect spot for morning coffee ☕ #coffee #mood</span>
+                    </div>
+                    
+                    <button class="text-text-muted text-sm mt-1">View all 15 comments</button>
+                </div>
+            </article>
+
+            <!-- Post 3 -->
+            <article class="border-b border-secondary-dark">
+                <!-- Post Header -->
+                <div class="flex items-center justify-between p-4">
+                    <div class="flex items-center space-x-3">
+                        <!-- Third post author's profile photo -->
+                        <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-4.0.3&w=150&h=150&fit=crop" 
+                             alt="Post author" 
+                             class="w-8 h-8 rounded-full object-cover" 
+                             data-mock="true">
+                        <div>
+                            <span class="font-semibold text-sm" data-bind="post.author">sarah_k</span>
+                            <div class="text-xs text-text-muted">6 hours ago</div>
+                        </div>
+                    </div>
+                    <button class="text-text-light hover:text-accent-blue transition-colors">
+                        <i class="fas fa-ellipsis-h"></i>
+                    </button>
+                </div>
+
+                <!-- Post Content -->
+                <div class="relative">
+                    <!-- A vibrant street art mural with colorful graffiti on a brick wall -->
+                    <img src="https://images.unsplash.com/photo-1541961017774-22349e4a1262?ixlib=rb-4.0.3&w=800&h=800&fit=crop" 
+                         alt="Colorful street art mural" 
+                         class="w-full aspect-square object-cover" 
+                         data-mock="true">
+                </div>
+
+                <!-- Post Actions -->
+                <div class="p-4">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center space-x-4">
+                            <button class="text-text-light hover:text-accent-pink transition-colors" data-event="click:toggleLike">
+                                <i class="far fa-heart text-xl"></i>
+                            </button>
+                            <button class="text-text-light hover:text-accent-blue transition-colors">
+                                <i class="far fa-comment text-xl"></i>
+                            </button>
+                            <button class="text-text-light hover:text-accent-blue transition-colors">
+                                <i class="far fa-paper-plane text-xl"></i>
+                            </button>
+                        </div>
+                        <button class="text-text-light hover:text-accent-blue transition-colors">
+                            <i class="far fa-bookmark text-xl"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="mb-2">
+                        <span class="font-semibold text-sm" data-bind="post.likes">67 likes</span>
+                    </div>
+                    
+                    <div class="text-sm">
+                        <span class="font-semibold" data-bind="post.author">sarah_k</span>
+                        <span class="ml-2" data-bind="post.caption" data-mock="true">Love discovering street art! 🎨 #streetart #urban</span>
+                    </div>
+                    
+                    <button class="text-text-muted text-sm mt-1">View all 8 comments</button>
+                </div>
+            </article>
+            <!-- @END_MAP )) -->
+        </main>
+        <!-- @END_COMPONENT: FeedSection -->
+
+        <!-- @COMPONENT: BottomNavigation -->
+        <nav class="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-md bg-black border-t border-secondary-dark">
+            <div class="flex items-center justify-around py-2">
+                <button class="flex flex-col items-center space-y-1 p-2 text-accent-blue" data-event="click:navigateHome">
+                    <i class="fas fa-home text-xl"></i>
+                    <span class="text-xs">Home</span>
+                </button>
+                
+                <button class="flex flex-col items-center space-y-1 p-2 text-text-muted hover:text-accent-blue transition-colors" data-event="click:navigateGoonings">
+                    <i class="fas fa-search text-xl"></i>
+                    <span class="text-xs">Goonings</span>
+                </button>
+                
+                <button class="flex flex-col items-center space-y-1 p-2 text-text-muted hover:text-accent-blue transition-colors" data-event="click:openCreatePost">
+                    <i class="fas fa-plus-square text-xl"></i>
+                    <span class="text-xs">Post</span>
+                </button>
+                
+                <button class="flex flex-col items-center space-y-1 p-2 text-text-muted hover:text-accent-blue transition-colors" data-event="click:navigateMessages">
+                    <i class="fas fa-comments text-xl"></i>
+                    <span class="text-xs">Chat</span>
+                </button>
+                
+                <button class="flex flex-col items-center space-y-1 p-2 text-text-muted hover:text-accent-blue transition-colors" data-event="click:navigateProfile">
+                    <!-- User's profile photo in navigation -->
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&w=150&h=150&fit=crop" 
+                         alt="Your profile" 
+                         class="w-6 h-6 rounded-full object-cover border border-text-muted" 
+                         data-mock="true">
+                    <span class="text-xs">Profile</span>
+                </button>
+            </div>
+        </nav>
+        <!-- @END_COMPONENT: BottomNavigation -->
+
+        <!-- @COMPONENT: CreatePostModal (Hidden by default) -->
+        <div class="fixed inset-0 bg-black bg-opacity-80 z-50 hidden" id="createPostModal">
+            <div class="flex items-center justify-center min-h-screen p-4">
+                <div class="bg-secondary-dark rounded-lg w-full max-w-sm">
+                    <div class="flex items-center justify-between p-4 border-b border-primary-dark">
+                        <button class="text-text-muted" data-event="click:closeModal">
+                            <i class="fas fa-times text-xl"></i>
+                        </button>
+                        <h3 class="font-semibold">New Post</h3>
+                        <button class="text-accent-blue font-semibold" data-event="click:sharePost">Share</button>
+                    </div>
+                    
+                    <div class="p-4">
+                        <div class="border-2 border-dashed border-text-muted rounded-lg p-8 text-center mb-4">
+                            <i class="fas fa-cloud-upload-alt text-4xl text-text-muted mb-2"></i>
+                            <p class="text-text-muted">Tap to upload photo or video</p>
+                            <!-- @FUNCTIONALITY: File upload component should handle image/video selection -->
+                        </div>
+                        
+                        <textarea 
+                            placeholder="Write a caption..." 
+                            class="w-full bg-primary-dark border border-secondary-dark rounded-lg p-3 text-text-light placeholder-text-muted resize-none"
+                            rows="3"
+                            data-mock="true">
+                        </textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- @END_COMPONENT: CreatePostModal -->
+
+        <!-- @COMPONENT: MessagesScreen (Hidden by default) -->
+        <div class="fixed inset-0 bg-black z-40 hidden" id="messagesScreen">
+            <div class="flex flex-col h-full">
+                <!-- Messages Header -->
+                <header class="flex items-center justify-between p-4 border-b border-secondary-dark">
+                    <button class="text-text-light" data-event="click:backToHome">
+                        <i class="fas fa-arrow-left text-xl"></i>
+                    </button>
+                    <h2 class="font-semibold text-lg">Messages</h2>
+                    <button class="text-text-light">
+                        <i class="fas fa-edit text-xl"></i>
+                    </button>
+                </header>
+
+                <!-- Chat Tabs -->
+                <div class="flex border-b border-secondary-dark">
+                    <button class="flex-1 py-3 text-center border-b-2 border-accent-blue text-accent-blue font-semibold">
+                        Direct
+                    </button>
+                    <button class="flex-1 py-3 text-center text-text-muted">
+                        Groups
+                    </button>
+                    <button class="flex-1 py-3 text-center text-text-muted">
+                        Global
+                    </button>
+                </div>
+
+                <!-- Chat List -->
+                <div class="flex-1 overflow-y-auto">
+                    <!-- @MAP: chats.map(chat => ( -->
+                    <div class="flex items-center space-x-3 p-4 border-b border-secondary-dark hover:bg-secondary-dark transition-colors" data-event="click:openChat">
+                        <!-- Chat partner's profile photo -->
+                        <img src="https://pixabay.com/get/gb71916e79164576b4ae5fc9e58ff77f1ed79c42c786647d2674af73ac2affcd497b65f09a403a9474b30d8f1e32eea0cf9634fb0dd32d5ee1b38dd9eed79a3a0_1280.jpg" 
+                             alt="Chat partner" 
+                             class="w-12 h-12 rounded-full object-cover" 
+                             data-mock="true">
+                        <div class="flex-1">
+                            <div class="flex items-center justify-between">
+                                <span class="font-semibold" data-bind="chat.partner">alex_g</span>
+                                <span class="text-xs text-text-muted" data-bind="chat.timestamp">2h</span>
+                            </div>
+                            <p class="text-sm text-text-muted truncate" data-bind="chat.lastMessage" data-mock="true">Hey! How are you doing?</p>
+                        </div>
+                        <div class="w-2 h-2 bg-accent-blue rounded-full"></div>
+                    </div>
+
+                    <div class="flex items-center space-x-3 p-4 border-b border-secondary-dark hover:bg-secondary-dark transition-colors" data-event="click:openChat">
+                        <!-- Another chat partner's profile photo -->
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&w=150&h=150&fit=crop" 
+                             alt="Chat partner" 
+                             class="w-12 h-12 rounded-full object-cover" 
+                             data-mock="true">
+                        <div class="flex-1">
+                            <div class="flex items-center justify-between">
+                                <span class="font-semibold" data-bind="chat.partner">mike_22</span>
+                                <span class="text-xs text-text-muted" data-bind="chat.timestamp">1d</span>
+                            </div>
+                            <p class="text-sm text-text-muted truncate" data-bind="chat.lastMessage" data-mock="true">That photo was amazing!</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-3 p-4 border-b border-secondary-dark hover:bg-secondary-dark transition-colors" data-event="click:openChat">
+                        <!-- Third chat partner's profile photo -->
+                        <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-4.0.3&w=150&h=150&fit=crop" 
+                             alt="Chat partner" 
+                             class="w-12 h-12 rounded-full object-cover" 
+                             data-mock="true">
+                        <div class="flex-1">
+                            <div class="flex items-center justify-between">
+                                <span class="font-semibold" data-bind="chat.partner">sarah_k</span>
+                                <span class="text-xs text-text-muted" data-bind="chat.timestamp">3d</span>
+                            </div>
+                            <p class="text-sm text-text-muted truncate" data-bind="chat.lastMessage" data-mock="true">See you later!</p>
+                        </div>
+                    </div>
+                    <!-- @END_MAP )) -->
+                </div>
+            </div>
+        </div>
+        <!-- @END_COMPONENT: MessagesScreen -->
+    </div>
+    <!-- @END_COMPONENT: MainApp -->
+
+    <!-- @STATE: currentView:string = 'home' -->
+    <!-- @STATE: isCreatePostOpen:boolean = false -->
+    <!-- @STATE: posts:array = [] -->
+    <!-- @STATE: currentUser:object = null -->
+
+    <script>
+        (function() {
+            // TODO: Implement state management, API calls, and business logic
+            
+            // Basic UI interactions for demo purposes
+            const createPostModal = document.getElementById('createPostModal');
+            const messagesScreen = document.getElementById('messagesScreen');
+            
+            // Navigation handlers
+            document.addEventListener('click', function(e) {
+                const button = e.target.closest('[data-event]');
+                if (!button) return;
+                
+                const [event, action] = button.dataset.event.split(':');
+                
+                if (event === 'click') {
+                    switch(action) {
+                        case 'openCreatePost':
+                            createPostModal?.classList.remove('hidden');
+                            break;
+                        case 'closeModal':
+                            createPostModal?.classList.add('hidden');
+                            break;
+                        case 'navigateMessages':
+                            messagesScreen?.classList.remove('hidden');
+                            break;
+                        case 'backToHome':
+                            messagesScreen?.classList.add('hidden');
+                            break;
+                        case 'toggleLike':
+                            const icon = button.querySelector('i');
+                            if (icon.classList.contains('far')) {
+                                icon.classList.remove('far');
+                                icon.classList.add('fas');
+                                button.classList.add('text-accent-pink');
+                            } else {
+                                icon.classList.add('far');
+                                icon.classList.remove('fas');
+                                button.classList.remove('text-accent-pink');
+                            }
+                            break;
+                    }
+                }
+            });
+
+            // Close modal on outside click
+            createPostModal?.addEventListener('click', function(e) {
+                if (e.target === createPostModal) {
+                    createPostModal.classList.add('hidden');
+                }
+            });
+
+            // TODO: Implement real-time messaging
+            // TODO: Implement file upload functionality
+            // TODO: Implement user authentication and profile management
+            // TODO: Implement post creation and sharing
+            // TODO: Implement global chat functionality
+            // TODO: Implement story/status feature with 24-hour expiry
+        })();
+    </script>
+</body>
+</html>
